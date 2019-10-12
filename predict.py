@@ -8,10 +8,14 @@ import os
 import keras
 import pandas as pd
 import numpy as np
+import tensorflow as tf
 np.random.seed(1337)
 
-
+global model
 model = load_model('./resources/model')
+global graph
+graph = tf.get_default_graph()
+
 print("model loaded")
 max_words = 1000
 max_len = 150
@@ -29,9 +33,10 @@ def predict(argv):
     series = pd.Series([argv])
 
     def modelPredict(predict, model):
-        test_sequences = tok.texts_to_sequences(predict)
-        test_sequences_matrix = sequence.pad_sequences(
-            test_sequences, maxlen=max_len)
-        return model.predict(test_sequences_matrix)
+        with graph.as_default():
+            test_sequences = tok.texts_to_sequences(predict)
+            test_sequences_matrix = sequence.pad_sequences(
+                test_sequences, maxlen=max_len)
+            return model.predict(test_sequences_matrix)
     modelPredict(series, model)
     return str(round(modelPredict(series, model).item(0)*100, 2))
