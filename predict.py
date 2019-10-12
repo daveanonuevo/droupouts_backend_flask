@@ -3,6 +3,7 @@ from sklearn.preprocessing import LabelEncoder
 from keras.preprocessing import sequence
 from keras.preprocessing.text import Tokenizer
 from keras.models import load_model
+from keras import backend as K
 import os
 import keras
 import pandas as pd
@@ -25,6 +26,7 @@ sequences_matrix = sequence.pad_sequences(sequences, maxlen=max_len)
 
 
 def predict(argv):
+    K.clear_session()
     series = pd.Series([argv])
 
     def modelPredict(predict, model):
