@@ -11,7 +11,6 @@ import numpy as np
 np.random.seed(1337)
 
 
-K.clear_session()
 model = load_model('./resources/model')
 model._make_predict_function()
 print("model loaded")
@@ -28,7 +27,6 @@ sequences_matrix = sequence.pad_sequences(sequences, maxlen=max_len)
 
 
 def predict(argv):
-    K.clear_session()
     series = pd.Series([argv])
 
     def modelPredict(predict, model):
