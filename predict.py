@@ -10,6 +10,8 @@ import pandas as pd
 import numpy as np
 np.random.seed(1337)
 
+
+K.clear_session()
 model = load_model('./resources/model')
 model._make_predict_function()
 print("model loaded")
