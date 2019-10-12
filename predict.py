@@ -8,24 +8,10 @@ import os
 import keras
 import pandas as pd
 import numpy as np
-from tensorflow import keras
-import tensorflow as tf
 np.random.seed(1337)
 
-config = tf.ConfigProto(
-    device_count={'GPU': 1},
-    intra_op_parallelism_threads=1,
-    allow_soft_placement=True
-)
 
-config.gpu_options.allow_growth = True
-config.gpu_options.per_process_gpu_memory_fraction = 0.6
-
-session = tf.Session(config=config)
-keras.backend.set_session(session)
-
-model = keras.models.load_model(filepath='./resources/model')
-model._make_predict_function()
+model = load_model('./resources/model')
 print("model loaded")
 max_words = 1000
 max_len = 150
@@ -43,11 +29,9 @@ def predict(argv):
     series = pd.Series([argv])
 
     def modelPredict(predict, model):
-        with session.as_default():
-            with session.graph.as_default():
-                test_sequences = tok.texts_to_sequences(predict)
-                test_sequences_matrix = sequence.pad_sequences(
-                    test_sequences, maxlen=max_len)
-                return model.predict(test_sequences_matrix)
+        test_sequences = tok.texts_to_sequences(predict)
+        test_sequences_matrix = sequence.pad_sequences(
+            test_sequences, maxlen=max_len)
+        return model.predict(test_sequences_matrix)
     modelPredict(series, model)
     return str(round(modelPredict(series, model).item(0)*100, 2))
