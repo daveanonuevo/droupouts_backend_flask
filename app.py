@@ -19,7 +19,7 @@ def get_pred():
     fromNumber = req_data['from']
     print(argv)
     x = {"prediction": predict(argv)}
-    return x
+    return predict(argv)
 
 
 @app.route('/report', methods=['POST'])
